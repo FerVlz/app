@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SABORE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat fixed;
+            min-height: 100vh;
+            padding: 30px 20px;
+            color: #f8fafc;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .page {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 30px 80px rgba(8, 15, 34, 0.38);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        header h1 {
+            font-size: 46px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #eff6ff;
+            text-shadow: 0 12px 35px rgba(15, 23, 42, 0.45);
+        }
+        
+        header p {
+            font-size: 16px;
+            opacity: 0.95;
+            color: #dbeafe;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+        
+        .layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.18);
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+            padding: 30px;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .panel h2 {
+            color: #4338ca;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 3px solid rgba(67, 56, 202, 0.26);
+            padding-bottom: 12px;
+        }
+        
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: inherit;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background-color: #f8f9ff;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        
+        small {
+            display: block;
+            color: #9ca3af;
+            margin-top: -12px;
+            margin-bottom: 16px;
+            font-size: 12px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.25s ease;
+            box-shadow: 0 10px 28px rgba(67, 56, 202, 0.22);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+            opacity: 0.98;
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .recipe-card {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            border: 1px solid rgba(99, 102, 241, 0.18);
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+            padding: 24px;
+        }
+
+        .recipe-card img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: block;
+            object-fit: cover;
+        }
+        
+        .recipe-card h3 {
+            color: #312e81;
+            font-size: 28px;
+            margin: 0 0 12px;
+        }
+        
+        .info-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .info-row label {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .info-row select, .info-row input {
+            margin: 0;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .info-row span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8ecff 100%);
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            color: #667eea;
+            font-weight: 600;
+            border: 2px solid #e0e6ff;
+        }
+        
+        .ingredients-section {
+            margin-top: 24px;
+        }
+        
+        .ingredients-section h4 {
+            color: #1e293b;
+            font-size: 16px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ingredients-section h4::before {
+            content: "🛒";
+            font-size: 18px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+        
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            text-align: left;
+            font-size: 14px;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            font-weight: 700;
+            color: #312e81;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.4);
+        }
+        
+        td {
+            color: #334155;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .procedure-section {
+            margin-top: 24px;
+            background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+            padding: 18px;
+            border-radius: 14px;
+            border-left: 4px solid #2563eb;
+        }
+        
+        .procedure-section h4 {
+            color: #1d4ed8;
+            font-size: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .procedure-section h4::before {
+            content: "👨‍🍳";
+            font-size: 18px;
+        }
+        
+        .procedure-text {
+            color: #1e293b;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+        
+        .error {
+            background: #fee2e2;
+            color: #7f1d1d;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            font-size: 13px;
+            margin-top: 40px;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 768px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 32px;
+            }
+            
+            .panel {
+                padding: 20px;
+            }
+            input, textarea, select, button {
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+            #pasteArea {
+                min-height: 120px;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <header>
+        <h1>🎂 SABORE</h1>
+        <p>Agrega recetas y ajusta automáticamente las cantidades según el número de personas</p>
+    </header>
+
+    
+    <div class="layout">
+        <section class="panel">
+            <h2>➕ Agregar nueva receta</h2>
+            <form method="POST" action="recetas.php" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add_recipe">
+                
+                <label for="name">Nombre de la receta</label>
+                <input type="text" id="name" name="name" required placeholder="Ej. Tacos de pollo, Ensalada César">
+
+                <label for="servings">Porciones base</label>
+                <input type="text" id="servings" name="servings" required placeholder="Ej. 2, 2/3, 2 personas, 2+">
+
+                <label for="ingredients">Ingredientes</label>
+                <textarea id="ingredients" name="ingredients" required placeholder="Ejemplo:&#10;2 taza harina&#10;1 unidad huevo&#10;0.5 taza leche&#10;1/4 taza azúcar"></textarea>
+                <small>Escribe cada ingrediente en una línea: <strong>cantidad unidad ingrediente</strong></small>
+
+                <label for="procedure">Procedimiento (pasos)</label>
+                <textarea id="procedure" name="procedure" placeholder="Ejemplo:&#10;1. Prepara los ingredientes secos.&#10;2. Mezcla en un recipiente.&#10;3. Cocina a fuego medio.&#10;4. Sirve caliente."></textarea>
+                <small>Describe los pasos para preparar la receta</small>
+
+                <label for="image">Imagen de la receta (opcional)</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <input type="hidden" id="clipboardImage" name="clipboard_image" value="">
+                <small>Puedes pegar una imagen desde el portapapeles directamente en el formulario.</small>
+
+                <button type="submit">💾 Guardar receta</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>📚 Recetas</h2>
+            
+            <div class="info-row">
+                <label for="recipeSelect" style="margin: 0;">Seleccionar receta</label>
+                <select id="recipeSelect"></select>
+            </div>
+
+            <div class="info-row">
+                <label for="personCount" style="margin: 0;">👥 Personas</label>
+                <input type="number" id="personCount" min="1" value="2" style="margin: 0;">
+            </div>
+
+            <div class="recipe-card" id="recipeCard">
+                <img id="recipeImage" src="" alt="" style="max-width:240px;border-radius:12px;margin-bottom:12px;display:none;object-fit:cover;" />
+                
+                <div id="editImageSection" style="background: linear-gradient(135deg, #f0f4ff 0%, #e8ecff 100%); padding: 16px; border-radius: 12px; margin-bottom: 16px; border: 2px dashed #667eea; display: none;">
+                    <p style="font-size: 13px; color: #667eea; font-weight: 600; margin-bottom: 10px;">📸 Pega una imagen desde el portapapeles para actualizar la foto de esta receta</p>
+                <div id="pasteArea" style="padding: 20px; border: 2px dashed #aaa; border-radius: 8px; text-align: center; cursor: pointer; background: white; transition: all 0.3s;" contenteditable="true" tabindex="0">
+                        <p style="color: #999; font-size: 13px;">Pega aquí (Ctrl+V) o haz clic para pegar</p>
+                    </div>
+                    <input type="file" id="pasteFileInput" accept="image/*" style="display:block;margin-top:12px;width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;background:white;" />
+                </div>
+                
+                <h3 id="recipeTitle">Selecciona una receta</h3>
+                <div class="info-row">
+                    <span id="baseServings">📊 Porciones base: -</span>
+                    <span id="scaleFactor">🔢 Factor: -</span>
+                </div>
+
+                <div class="ingredients-section">
+                    <h4>Ingredientes</h4>
+                    <table>
+                        <thead>
+                            <tr><th>Cantidad</th><th>Unidad</th><th>Ingrediente</th></tr>
+                        </thead>
+                        <tbody id="recipeIngredients">
+                            <tr><td colspan="3">Elige una receta para ver los ingredientes.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="procedureContainer"></div>
+            </div>
+        </section>
+    </div>
+
+    <div class="footer">
+        📁 Las recetas se guardan automáticamente en <code>recipes.json</code>
+    </div>
+</div>
+
+<script>
+    const recipes = [{"id":"r6a186bb66b3e39.64958169","name":"Pastel de zanahoria","servings":8,"ingredients":[{"quantity":0.2,"unit":"kg","item":"mantequilla sin sal"},{"quantity":0.15,"unit":"kg","item":"Azúcar refinada"},{"quantity":20,"unit":"kg\/piezas","item":"Yema de huevo"},{"quantity":0.155,"unit":"kg","item":"Harina de almendra"},{"quantity":0.155,"unit":"kg","item":"Harina floja"},{"quantity":0.31,"unit":"kg","item":"Zanahoria"},{"quantity":0.004,"unit":"kg","item":"Canela en polvo"},{"quantity":0.015,"unit":"Kg","item":"Polvo para hornear"},{"quantity":30,"unit":"Kg\/piezas","item":"Clara de huevo"},{"quantity":0.15,"unit":"Kg","item":"Azúcar refinada"},{"quantity":0.03,"unit":"Kg","item":"Nuez pecana o almendra"},{"quantity":0.3,"unit":"Kg","item":"Queso crema"},{"quantity":0.15,"unit":"Kg","item":"Mantequilla sin sal"},{"quantity":0.1,"unit":"Kg","item":"Azúcar glass"}],"procedure":"Preparación de todas las recetas:  \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Enharinar 3 moldes de 18 cm y colocar en el fondo del molde un círculo de papel encerado.  \r\n \r\nElaboración: \r\nPan de zanahoria \r\n1. Acremar la mantequilla con el azúcar1 hasta esponjar por 3 min. \r\n2. Agregar las yemas uno por uno a la mantequilla con el azúcar. \r\n3. Incorporar la harina de almendra, la harina floja, la canela y polvo para hornear de forma revolvente. \r\n4. Añadir la zanahoria previamente rayada, al mezclarla se notará que la mezcla se humedece. \r\n5. En otro recipiente batir la clara de huevo a punto de pico suave e ir incorporando el azúcar2 en forma \r\nde lluvia hasta agotarse.  \r\n6. Incorporar las claras de forma envolvente a la mezcla de la zanahoria en 2 partes. \r\n7. Verter la mezcla en los moldes equitativamente con el mismo peso que será aproximadamente de 500 \r\ngramos por molde. \r\n8. + RUQHDU D & SRU P LQ R KDVWD T XH OD F R F F L y Q GHO E L ] F R F KR VHD F RP SOHWD VH SXHGH WHVWDU OD\r\ncocción con un palillo de brocheta y reservar.  \r\n9. Dejar enfriar los bizcochos boca abajo sobre una rejilla. \r\n10. Decorar rellenado con el betún entre cada bizcocho, seguido cubriendo el bizcocho con el betún con \r\nla ayuda de una espátula pastelera para darle un acabo de naked cake. \r\nBetún de queso crema: \r\n1. Acremar por 3 min el queso crema con la mantequilla ambas a temperatura ambiente hasta tener una \r\ntextura esponjosa y untuosa.  \r\n2. Añadir el azúcar glass poco a poco sin dejar de batir hasta terminar, debe ser de poco a poco para que \r\nno regrese el azúcar por la fuerza del batido.  \r\n3. Colocar la mezcla en una manga con duya lisa para decorar el pastel con unos kisses en la orilla del \r\npastel.","image":"uploads\/img_6a1f6a47ea53b1.71711369.png"},{"id":"r6a186e0c7c4a41.06084734","name":"Pastel Red Velvet","servings":8,"ingredients":[{"quantity":0.11,"unit":"kg","item":"Mantequilla sin sal"},{"quantity":0.25,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.03,"unit":"kg","item":"Cocoa"},{"quantity":0.3,"unit":"kg","item":"Harina floja"},{"quantity":0.005,"unit":"kg","item":"Bicarbonato de sodio"},{"quantity":0.015,"unit":"L","item":"Vinagre blanco"},{"quantity":0.005,"unit":"kg","item":"Colorante rojo en gel"},{"quantity":0.005,"unit":"L","item":"Esencia de vainilla"},{"quantity":0.24,"unit":"kg","item":"Crema ácida"},{"quantity":0.3,"unit":"kg","item":"Queso crema"},{"quantity":0.15,"unit":"kg","item":"Mantequilla sin sal"},{"quantity":0.1,"unit":"kg","item":"Azúcar glass"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes. \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Enharinar 3 moldes de 18 cm y colocar en el fondo del molde un círculo de papel encerado.  \r\n \r\nElaboración:  \r\nBizcocho: \r\n1. Acremar la mantequilla en una batidora con el aditamento de pala hasta que esponje aproximadamente \r\npor 2 min, seguido añadir el azúcar. \r\n2. Añadir los huevos uno por uno y batir por 3 min. más. \r\n3. Por aparte en un bol juntar en un recipiente todos los polvos (cocoa, harina) y añadir a la mezcla de la \r\nmantequilla en 3 partes intercalándola con los líquidos (esencia de vainilla, colorante y crema ácida); \r\nterminando siempre por los polvos.  \r\n4. Por último, mezclar el vinagre y el bicarbonato en un recipiente, este hará efervescencia, estando en \r\nese estado añadir a la mezcla del bizcocho. \r\n5. Dividir la mezcla equitativamente entre los 3 moldes, pesando cada uno. \r\n6. + RUQHDU D & SRU P LQ R KDVWD T XH OD F R F F L y Q GHO E L ] F R F KR VHD F RP SOHWD VH SXHGH WHVWDU OD\r\nacción con un palillo de brocheta y reservar. \r\n7. Dejar enfriar los bizcochos boca abajo sobre una rejilla. \r\nBetún de queso crema: \r\n1. Acremar el queso crema con la mantequilla hasta tener una textura untuosa.  \r\n2. Añadir el azúcar glass poco a poco hasta terminar.  \r\n3. Colocar la mezcla en una manga con duya lisa para decorar el pastel Según el paso 10 del pan de \r\nbizcocho. \r\nPara el armado: \r\n1. Decorar rellenado con el betún entre cada bizcocho. \r\n2. Cubrir el bizcocho con el betún con la ayuda de una espátula pastelera para darle un acabo de naked \r\ncake.","image":"uploads\/img_6a1f6b6dc9c338.36420007.png"},{"id":"r6a18704c1d8d71.14501888","name":"Volteado de durazno y romero","servings":2,"ingredients":[{"quantity":0.18,"unit":"kg","item":"Azúcar moscabado"},{"quantity":0.06,"unit":"kg","item":"Mantequilla sin sal"},{"quantity":0.04,"unit":"L","item":"Te de romero"},{"quantity":0.12,"unit":"kg","item":"Mantequilla sin sal"},{"quantity":0.18,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.16,"unit":"kg","item":"Harina floja"},{"quantity":0.009,"unit":"kg","item":"Polvo para hornear"},{"quantity":0.002,"unit":"kg","item":"Sal"},{"quantity":0.08,"unit":"L","item":"Leche entera"},{"quantity":0.005,"unit":"kg","item":"Esencia de vainilla"},{"quantity":0.06,"unit":"L","item":"Te de romero"},{"quantity":6,"unit":"piezas","item":"Mitades de durazno en almíbar"},{"quantity":10,"unit":"piezas","item":"Cerezas en almíbar"}],"procedure":"Preparación de todas las recetas: \r\npiezas \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar un molde de bizcocho desmontable y teflonado (puede no serlo) de 18 cm o un molde de \r\npanque de 25 cm. \r\nElaboración: \r\nPara el caramelo: \r\n1. Derretir en una sartén la mantequilla y añadir el azúcar moscabado, mezclar hasta no ver granos de \r\nazúcar. \r\n2. Añadir el té y reducir por 2 min. \r\nPara el bizcocho: \r\n1. Colocar los duraznos en forma circular junto con las cerezas en el molde con el caramelo, reservar.  \r\n2. Verter antes de que se enfríe el caramelo en el molde, con cuidado que no se muevan los duraznos y \r\ncerezas. \r\n3. Acremar la mantequilla en una batidora con el aditamento de pala hasta que esponje y añadir el azúcar \r\npoco a poco.  \r\n4. Añadir los huevos uno por uno con la vainilla y batir por 3 min. más. \r\n5. Juntar en un recipiente todos los polvos (harina, polvo para hornear) con la sal para añadir a la mezcla \r\nde la mantequilla en una sola parte. \r\n6. Añadir a la mezcla anterior la leche y el té de romero y batir por un minuto más hasta incorporar. \r\n7. Colocar la mezcla con ayuda de un scoop o dos cucharas soperas en el molde con los duraznos poco \r\na poco debido a que la mezcla es muy densa y se debe procurar no mover los higos y las cerezas, \r\nrepartir por el molde equitativamente. \r\n8. + RU QH DU D\r\nacción con un palillo de brocheta y reservar. \r\n9. Dejar enfriar por 5 min y separar los lados el bizcocho del molde para enseguida voltearlo, no se debe \r\n\r\nde dejar enfriar por completo, porque si no el caramelo se endurecerá.","image":"uploads\/img_6a1f6cae3b21d4.61381077.png"},{"id":"r6a1871a8166714.07222657","name":"Swiss Roll","servings":8,"ingredients":[{"quantity":20,"unit":"Piezas","item":"Yema de huevo"},{"quantity":0.1,"unit":"kg","item":"Azucar1"},{"quantity":300,"unit":"\/10","item":"kg \/ piezas Claras de huevo"},{"quantity":0.14,"unit":"Kg","item":"Azúcar refinada2"},{"quantity":0.002,"unit":"kg","item":"Sal"},{"quantity":0.18,"unit":"kg","item":"Harina floja"},{"quantity":0.004,"unit":"kg","item":"Polvo para hornear"},{"quantity":0.1,"unit":"L","item":"Aceite vegetal"},{"quantity":0.1,"unit":"L","item":"Leche entera"},{"quantity":0.3,"unit":"kg","item":"Fresas o fruta de elección congelada"},{"quantity":0.15,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.003,"unit":"kg","item":"Pectina"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar con papel encerado una charola de 40 cm de largo, 25 cm de ancho y 4 cm de altura o en \r\ncaso de no contar ajustar la receta al tamaño de las charolas que se dispongan en campus. \r\n \r\nElaboración:  \r\n1. Batir las yemas de huevo con la sal y el azúcar1 hasta blanquear en la batidora. \r\n2. En otro recipiente batir las claras de huevo hasta montar a punto de pico suave añadiendo el azucar2 \r\nen forma de lluvia, para elaborar un merengue francés. \r\n3. Añadir las yemas al merengue en 2 partes y mezclar de forma envolvente. Seguido por la harina y el \r\npolvo para hornear y mezclar nuevamente de forma envolvente. \r\n4. En un bol aparte mezclar el aceite y la leche para incorporarle 1\/4 parte de la mezcla anterior de forma \r\nrevolvente e igualar texturas y luego combinar con el resto de la masa de forma envolvente. \r\n5. Verter la masa en la charola y con ayuda de una espátula emparejar la masa. \r\n6. Golpear V XDYHPHQWH OD F KDUROD GRV YH F HV \\ PHWHU DO KRUQR SUH F DOHQWDGR D & SRU P L Q R KDVWD\r\nque el bizcocho se vea ligueramente dorado. \r\n7. Enfriar sobre una rejilla y despegar el papel encerado del bizcocho. \r\n8. Emparejar las orillas y aplicar la mermelada por todo el bizcocho. \r\n9. Enrollar cuidadosamente con un nuevo papel encerado y congelar por una hora.  \r\n10. Espolvorear con azúcar glass (opcional) y cortar las rodajas de 2 a 3 cm de grosor. \r\nPara la mermelada de fresa: \r\n1. En un coludo colocar las fresas cortadas en cuartos más la azúcar previamente combinada y mezclada \r\ncon la pectina para cocer a fuego bajo por 10min o hasta reducir el agua y tome textura espesa, otra \r\nforma de comprobar la textura es poder ver el fondo del coludo al moverla la mermelada. \r\n2. Enfriar y reservar para untar sobre el bizcocho frío.","image":"uploads\/img_6a1f6cc6654b28.61197910.png"},{"id":"r6a187c6f1e0fa4.45152129","name":"Babá al ron","servings":15,"ingredients":[{"quantity":0.08,"unit":"kg","item":"Leche entera"},{"quantity":0.015,"unit":"kg","item":"Levadura fresa"},{"quantity":0.1,"unit":"kg","item":"Harina de fuerza"},{"quantity":0.3,"unit":"kg","item":"Harina de fuerza"},{"quantity":0.014,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.005,"unit":"kg","item":"Sal"},{"quantity":0.5,"unit":"L","item":"Agua"},{"quantity":0.025,"unit":"kg","item":"Azúcar glass"},{"quantity":0.1,"unit":"L","item":"Ron añejo"},{"quantity":0.01,"unit":"kg","item":"Rayadura de limón"},{"quantity":0.004,"unit":"kg","item":"Grenetina en polvo"},{"quantity":0.3,"unit":"L","item":"Crema para batir"},{"quantity":0.1,"unit":"kg","item":"Azúcar refinada o glass"},{"quantity":1,"unit":"Pieza","item":"Vaina de vainilla"},{"quantity":0.002,"unit":"L","item":"Esencia de vainilla"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar un molde de cupcakes o flaneras de aluminio de 5 cm. de diámetro. \r\nElaboración: \r\nPolish: \r\n1. Mezclar la leche con la levadura hasta disolver. \r\n2. Añadir harina y mezclar perfectamente bien.  \r\n3. Fermentar tapado entre 6 a 8 horas a temperatura ambiente, 1.5 h en fermentadora o elaborar una \r\nnoche anterior.\r\nMasa final: \r\n1. En mantequillar y enharinar el molde de cupcakes de 12 piezas o el que se tenga en campus. \r\n2. Amasar harina, huevos, azúcar, sal, mantequilla y el polish. \r\n3. Amasar hasta obtener una masa lisa.  \r\n4. Fermentar la masa en bol tapado hasta doblar su volumen o pasa una hora. \r\n5. Volcar la masa sobre la mesa y realizar piezas de 85 grs. aproximadamente y bolear. \r\n6. Disponer las piezas sobre un molde de cupcake, cocinar en horno a 180°C por 15 – 20 minutos \r\naproximadamente. \r\nAlmíbar de ron añejo: \r\n1. Colocar en un coludo el agua, azúcar glass y la rall DGXUD GH OL P y Q \\ F DOHQWDU D & \r\n2. Añadir el ron añejo y la grenetina previamente hidratada a la mezcla anterior y revolver hasta que la \r\ngrenetina se diluya. Enfriar. \r\n3. Colocar los babás en el almíbar por 5 min. hasta que la masa absorba el almíbar. Reservar. \r\nCrema chantilly: \r\n1. Mezclar la crema, el azúcar, la esencia y las semillas de la vainilla y batir hasta obtener textura de pico \r\nfirme de la crema. Reservar y enfriar.  \r\n2. Colocar la mezcla en una manga y decorar colocando crema sobre las babás y colocarle ralladura de \r\nlimón por arriba.","image":"uploads\/img_6a1f6ce29e23c8.89686343.png"},{"id":"r6a1ef48bc3fde1.32041926","name":"Madalenas","servings":15,"ingredients":[{"quantity":0.035,"unit":"kg","item":"Mantequilla sin sal"},{"quantity":1,"unit":"pieza","item":"Vaina de vainilla"},{"quantity":0.14,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.002,"unit":"kg","item":"Sal"},{"quantity":0.01,"unit":"kg","item":"Miel de abeja"},{"quantity":0.015,"unit":"L","item":"Aceite de oliva"},{"quantity":0.125,"unit":"kg","item":"Harina floja"},{"quantity":0.011,"unit":"kg","item":"Polvo para hornear"},{"quantity":0.05,"unit":"L","item":"Leche entera"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar con mantequilla y harina los 2 moldes de 8 piezas cada uno. \r\n \r\nElaboración:  \r\n1. ’ HUUHWL U OD PDQWH T X LOOD HQ XQD VDUWpQ SH T XH x D D & D I XH J R EDMR R HQ P L F URRQGDV \r\n2. Dividir la vaina de vainilla en dos y sacar las semillas para reservar.  \r\n3. Batir los huevos en batidora junto con el azúcar, la sal y las semillas de la vaina de vainilla hasta que \r\nla mezcla este pálida y esponjosa. \r\n4. Añadir en forma de hilo el aceite de oliva, seguido de la harina y el polvo para hornear. \r\n5. A la mezcla anterior agregarle la mantequilla derretida y mezclar de forma envolvente y por último la \r\nleche. \r\n6. Refrigerar la masa de 2-3 horas. \r\n7. Colocar la masa en una manga pastelera a medio llenar para rellenar 2\/3 de los moldes de magdalenas \r\n\\ KRUQHDU D & SRU P LQ \r\n8. Desmoldar recién salidas del horno, reservar y enfriar.","image":"uploads\/img_6a1ef48bc0efe7.82729356.png"},{"id":"r6a1ef65b513139.43666837","name":"Mil hojas","servings":8,"ingredients":[{"quantity":0.284,"unit":"kg","item":"Mantequilla (1 para laminar)"},{"quantity":0.35,"unit":"kg","item":"Harina de trigo fuerte"},{"quantity":0.168,"unit":"L","item":"Agua"},{"quantity":0.035,"unit":"kg","item":"Mantequilla (2)"},{"quantity":0.007,"unit":"kg","item":"Sal"},{"quantity":0.003,"unit":"L","item":"Vinagre blanco"},{"quantity":0.004,"unit":"kg","item":"Malta en polvo"},{"quantity":0.567,"unit":"kg","item":"Peso total"},{"quantity":0.5,"unit":"L","item":"Leche entera"},{"quantity":0.01,"unit":"L","item":"Esencia de vainilla"},{"quantity":0.1,"unit":"\/5","item":"kg \/ piezas Yemas de huevo"},{"quantity":0.1,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.02,"unit":"kg","item":"Fécula de Maíz"},{"quantity":0.05,"unit":"kg","item":"Azúcar glass"},{"quantity":0.1,"unit":"kg","item":"Fresas naturales"},{"quantity":0.1,"unit":"kg","item":"Zarzamoras"},{"quantity":0.1,"unit":"kg","item":"Frambuesas"},{"quantity":0.1,"unit":"kg","item":"Hierba buena"}],"procedure":"Preparación para de todas las recetas:  \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes. \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Hojaldre. Realizar un cuadro de 30 cm por 30 cm con la mantequilla para laminar (1). \r\n5. Hojaldre. Reservar en refrigeración hasta su empleo.\r\nElaboración: \r\n1. Amasar en el tazón de la batidora con gancho harina, agua, mantequilla (2), sal, vinagre blanco y malta \r\nen polvo, hasta obtener una masa lisa y elástica. \r\n2. Colocar la masa sobre una mesa con un poco de harina y extender con ayuda de un rodillo a una \r\nmedida de 60 x 40 cm, enfriar la masa en refrigeración tapada con plástico autoadherente para no \r\nresecarla. \r\n3. Realizar el empaste colocando la mantequilla para laminar (1) en el centro de la masa y envolver con \r\nlos laterales. \r\n4. Extender la masa con rodillo o en laminadora a 4 mm de grosor aproximadamente, formando un \r\nrectángulo y realizar un doblez simple a la masa (Doblez simple: colocar el rectángulo de masa en \r\nforma horizontal y dividir de manera imaginaria en tres partes iguales; enumerar de izquierda a derecha \r\n1, 2, 3; doblar 3 sobre 2 y posteriormente 1 sobre 2). Enfriar la masa tapada con plástico autoadherente \r\nen refrigeración. \r\n5. Repetir la operación anterior cuatro ocasiones más enfriando la masa entre vuelta y vuelta. Se deben \r\ncompletar 5 pliegues sencillos. \r\n6. Extender la masa a 3 mm. de grosor, haciendo un rectángulo de 20 cm. de ancho por 60 cm. de largo. \r\n7. Espolvorear azúcar sobre el rectángulo de masa para hornear el rectángulo entero sobre una charola \r\ncon papel antiadherente, colocar otro papel antiadherente por encima de la masa y una charola del \r\nmismo tamaño y hornear de esa forma sin hacer peso en la charola de arriba. \r\n8. Enfriar por 1 hr. tapado. \r\n9. Cocinar a 170 °C por 45 min. aproximadamente con calor seco. \r\n10. Cortar en 3 rectángulos iguales con un corte preciso y evitar que se rompa la hojaldre.\r\nPara la crema pastelera: \r\n1. Agregar en un coludo u olla pequeña la leche o crema junto con la esencia de vainilla o la vaina ya \r\npartida por la mitad, añadiendo las semillas al igual que vaina dentro del líquido.  \r\n2. Dejar que hierva el líquido para luego añadirlo a la mezcla de las yemas de poco a poco temperando, \r\nmezclando con un batidor globo.\r\n3. Colocar las yemas en un bol y blanquear con un globo de mano. \r\n4. Añadir el azúcar y seguir batiendo hasta tener un crema pálida y esponjosa, seguido de la fécula de \r\nmaíz. \r\n5. Mezclar la leche como indica el paso 1 temperando las yemas. \r\n6. Regresar la crema a fuego medio hasta tener una temperatura de mezcla llegue a burbujear, siempre \r\nrevolviendo vigorosamente para que no queden grumos en la crema. \r\n7. Dejar enfriar colocándole un plástico a la crema, procurando que ambas tengan contacto. \r\n8. Una vez fría colocar en una manga pastelera a medio llenar, para después rellenar. \r\nPara el armado: \r\n1. Colocar un de los triángulos en un plato, con la manga rellena de pastelera colocar una capa 1 cm. \r\nsobre la hojaldre, colocar la segunda capa, repitiendo el proceso una vez más, terminando con \r\nhojaldre. \r\n2. Decorar con azúcar glass y frutas frescas. Opcional se puede decorar con glaseado real y ganache de \r\nchocolate","image":"uploads\/img_6a1ef65b50e7f1.68219594.png"},{"id":"r6a1ef71e83fff5.67084428","name":"Beignets","servings":20,"ingredients":[{"quantity":0.2,"unit":"L","item":"Agua"},{"quantity":0.05,"unit":"kg","item":"Azúcar"},{"quantity":0.002,"unit":"kg","item":"Sal"},{"quantity":0.05,"unit":"\/1","item":"kg \/ pieza Huevo"},{"quantity":0.12,"unit":"kg","item":"Leche evaporada"},{"quantity":0.45,"unit":"kg","item":"Harina"},{"quantity":0.03,"unit":"kg","item":"Manteca vegetal"},{"quantity":2,"unit":"L","item":"Aceite vegetal para freír"},{"quantity":0.2,"unit":"kg","item":"Azúcar glass"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Colocar un coludo con aceite para fritura semi profunda. \r\nElaboración: \r\n1. Mezclar la levadura, el agua y el azúcar en el recipiente de una batidora con un gancho para masa, \r\ncuando se vuelva espuma aproximadamente como en unos 10 minutos, agregar la sal, el huevo y la \r\nleche evaporada. \r\n2. Mezclar a velocidad baja, para después agregar 250 gramos de harina, hasta que empiece a formase \r\nla masa y por último la manteca. \r\n3. Añadir la harina restante, hasta incorporar.  \r\n4. Colocar la masa sobre la mesa para amasar la masa agregando un poco de harina si es necesario \r\nhasta que la masa tome forma suave, lisa sin pegarse a la mesa. \r\n5. Colocar la masa a un bol grande y engrasado con manteca y cubrir con un trapo de cocina o con papel \r\nplástico para dejarla crecer durante unos 45 minutos o hasta que la masa se haya duplicado su tamaño. \r\n6. Ponchar la masa para colocarla en la mesa enharinada y con un rodillo estirar hasta formar un \r\nrectángulo de 1 cm de grosor. \r\n7. Cortar piezas cuadrados de 5 cm trazando líneas horizontales y luego verticales. \r\n8. Coloque los beignets cuadrados en una bandeja con papel encerado para que dupliquen su tamaño \r\npor unos 40 minutos aproximadamente. \r\n9. Calentar en una coludo bajo 10 cm de aceite vegetal a 180°C colocando de 3 a 4 beignets en el aceite \r\ncaliente a la vez, cuando estén dorados dar la vuelta hasta que estén dorados por el otro lado. \r\n10. Escurrir los beignets sobre una rejilla o papel absorbente. \r\n11. Revolcar en azúcar glass estando calientes.","image":"uploads\/img_6a1ef71e7b9c49.25251687.png"},{"id":"r6a1ef81b050d12.25552831","name":"Churros","servings":20,"ingredients":[{"quantity":0.225,"unit":"L","item":"Agua"},{"quantity":0.06,"unit":"kg","item":"Azúcar refinada1"},{"quantity":0.09,"unit":"kg","item":"Mantequilla sin sal"},{"quantity":0.26,"unit":"kg","item":"Harina floja"},{"quantity":0.002,"unit":"kg","item":"Sal"},{"quantity":0.1,"unit":"\/","item":"2 kg \/ piezas Huevos"},{"quantity":2,"unit":"L","item":"Aceite vegetal"},{"quantity":0.2,"unit":"kg","item":"Azúcar refinada2"},{"quantity":0.01,"unit":"kg","item":"Canela en polvo"}],"procedure":"Preparación para de todas las recetas \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Dejar preparada una manga pastelera con una duya risada 1M. \r\n5. Colocar un coludo con aceite para fritura profunda. \r\n \r\nElaboración:  \r\n1. Colocar en un coludo el agua, azúcar, mantequilla y la sal a fuego medio hasta que se derrita la \r\nmantequilla por completo, mezclando con una pala de madera. \r\n2. Añadir de golpe la harina al coludo y mezclar hasta tener una masa homogénea, como si se estuviera \r\nelaborando un roux rubio. \r\n3. Colocar la masa en una batidora con el aditamento de pala para batir a velocidad baja hasta que la \r\nmasa entibie, seguidamente añadir los huevos uno por uno y batir hasta tener una masa elástica, batir \r\nhasta que los huevos se incorporen. \r\n4. Colocar la masa en una manga con una duya de boquilla rizada y freír en fritura profunda los churros \r\nHVWDQGR HO D F H LWH D &- 180°C hasta dorar, sacar los churros y dejar escurrir al aceite sobre una \r\nrejilla.\r\n5. Revolcar los churros estando calientes en azúcar2 con canela, previamente mezcladas, estando \r\ncalientes los churros y colocarlos en una bolsa de papel estraza.","image":"uploads\/img_6a1ef81b04d839.37634883.png"},{"id":"r6a1f56e13d2543.05638774","name":"Buñuelos españoles con miel","servings":2,"ingredients":[{"quantity":0.25,"unit":"kg","item":"Harina floja"},{"quantity":0.015,"unit":"kg","item":"Levadura fresca"},{"quantity":0.002,"unit":"kg","item":"Bicarbonato de sodio"},{"quantity":0.15,"unit":"L","item":"Agua tibia"},{"quantity":0.2,"unit":"kg","item":"Miel de abeja"},{"quantity":0.005,"unit":"kg","item":"Azúcar refinada"},{"quantity":1,"unit":"L","item":"Aceite vegetal para freír"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Colocar un coludo con aceite para fritura semi profunda. \r\n \r\nElaboración:  \r\n1. Disolver la levadura con agua tibia, azúcar y la mitad de la harina y dejar fermentar por 30 min. \r\n2. Colocar en un bol la harina restante, el bicarbonato y sal e incorporar el fermento anterior hasta obtener \r\nuna masa suave y pegajosa.  \r\n3. Dejar leudar por una hora, aproximadamente.  \r\n4. Formar con las manos humedecidas los buñuelos en forma circular. \r\n5. Freír los buñuelos en fritura semi profunda a 160-& KDVWD T XH HVWpQ GRUDGRV SRU DPERV ODGRV \r\n6. Dejar escurrir sobre una rejilla, para cuando estén tibios partir por la mitad y humedecerlos con \r\nabundante miel por dentro y por fuera.","image":"uploads\/img_6a1f56e13b7030.81697869.png"},{"id":"r6a1f57c4bcd3d5.80003281","name":"Tarte Tatin","servings":8,"ingredients":[{"quantity":0.25,"unit":"kg","item":"Harina floja"},{"quantity":0.12,"unit":"L","item":"Agua"},{"quantity":0.125,"unit":"kg","item":"Mantequilla sin sal o manteca vegetal"},{"quantity":0.003,"unit":"kg","item":"Sal"},{"quantity":0.08,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.05,"unit":"kg","item":"Mantequilla sin sal"},{"quantity":6,"unit":"Piezas","item":"Manzana royal gala o Fuji, Pink lady"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar molde de tarta de 20 cm. \r\n \r\nElaboración:  \r\nMasa Brisée: \r\n1. Cortar la mantequilla o manteca en cubos y refrigerar. \r\n2. Colocar en un bol la harina, sal y añadir la mantequilla o manteca en cubos fría y realizar el \r\nprocedimiento de sableado hasta obtener una textura de arena.  \r\n3. Añadir el huevo y agua, mezclar hasta obtener una masa lisa y homogénea. \r\n4. Envolver en papel plástico la masa de forma cuadrada y refrigerar por una hora. \r\n5. Suavizar la masa salida de refrigeración y con un rodillo estirarla de forma circular hasta lograr el \r\ntamaño de molde de la tarta. \r\n6. Enrollar la masa con ayuda del rodillo y cubrir el molde de tarta pegando todos los bordes \r\ncuidadosamente con los dedos.  \r\n7. Refrigerar por 20 min, pasado el tiempo cortar los excedentes y picar el fondo de la tarta con el tenedor. \r\n8. + RUQHDU D EODQF R D & DSUR [ L PDGDPH nte por 7 min. \r\n9. Enfriar y reservar hasta rellenar. \r\nRelleno: \r\n1. Descorazonar y pelar las manzanas y cortar en cuartos. Dejar sumergidas en agua con limón. \r\n2. Preparar en una sartén un caramelo oscuro con el azúcar y seguidamente añadir la mantequilla. \r\nMezclar. \r\n3. Colocar las manzanas en el caramelo con la mantequilla, tapar con papel encerado y cocer a fuego \r\nmedio por 5 min. \r\n4. Pasados los 5 min, virar las manzanas, tapar nuevamente y cocer por 5 min más. Repetir el proceso \r\nnuevamente.  \r\n5. Dejar enfriar y rellenar el molde de tarta con las manzanas y el caramelo que suelta.  \r\n6. Procurar colocar todas las manzanas para que el resultado sea correcto y estético.  \r\n7. Colocar por encima la masa estirada sobre las manzanas. \r\n8. + RUQHDU OD WDUWD SRU P LQ P i V D & o hasta dorar la masa. \r\n9. Dejar enfriar por 5 min y desmoldar estando tibio.","image":"uploads\/img_6a1f57c4bc8152.05409655.png"},{"id":"r6a1f58d952af14.64830622","name":"Tarta de pera y almendra","servings":8,"ingredients":[{"quantity":0.13,"unit":"kg","item":"Harina floja"},{"quantity":0.03,"unit":"kg","item":"Harina de Almendra"},{"quantity":0.05,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.1,"unit":"kg","item":"Mantequilla sin sal"},{"quantity":0.085,"unit":"kg","item":"Mantequilla sin sal"},{"quantity":0.085,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.005,"unit":"kg","item":"Rayadura de limón"},{"quantity":0.003,"unit":"L","item":"Esencia de vainilla"},{"quantity":0.085,"unit":"kg","item":"Harina de almendra"},{"quantity":0.028,"unit":"kg","item":"Harina floja"},{"quantity":3,"unit":"Pieza","item":"Peras Williams peladas"},{"quantity":1,"unit":"L","item":"Agua"},{"quantity":0.4,"unit":"kg","item":"Azúcar refinada"},{"quantity":1,"unit":"Pieza","item":"Vaina de vainilla"},{"quantity":1,"unit":"Pieza","item":"Rama de canela"},{"quantity":0.1,"unit":"kg","item":"Almendras fileteadas"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar molde de tarta de 25 cm. \r\nElaboración:  \r\nPara la masa:  \r\n1. Cortar la mantequilla en cubos y refrigerar. \r\n2. Colocar en un bol la harina, harina de almendra, azúcar y añadir la mantequilla en cubos fría y realizar \r\nel procedimiento de sableado hasta obtener una textura de arena.  \r\n3. Añadir la yema de huevo y mezclar hasta obtener una masa lisa y homogénea. \r\n4. Envolver en papel plástico la masa de forma cuadrada y refrigerar por una hora. \r\n5. Suavizar la masa salida de refrigeración y con un rodillo estirarla de forma circular hasta lograr el \r\ntamaño de molde de la tarta. \r\n6. Enrollar la masa con ayuda del rodillo y cubrir el molde de tarta pegando todos los bordes \r\ncuidadosamente con los dedos.  \r\n7. Refrigerar por 20 min. Pasado el tiempo cortar los excedentes y picar el fondo de la tarta con el tenedor. \r\n8. + RUQHDU D EODQF R D & DSUR [ L PDGDPHQWH SRU P L Q \r\n9. Enfriar la tarta y barnizar con huevo por el interior y por fuera de la tarta y hornear por otros 7 min o \r\nhasta que la tarta esté dorada.  \r\n10. Enfriar y reservar. \r\nFrangipane: \r\n1. Acremar la mantequilla y añadir el azúcar glass y la rayadura de limón hasta que la mantequilla esté \r\npálida y esponjada.  \r\n2. Añadir los huevos, la yema de huevo y la esencia de vainilla poco a poco. Batir hasta que todo esté \r\nincorporado. \r\n3. Añadir los polvos (harina de almendra y harina floja). \r\n4. Colocar la mezcla en una manga y rellenar la tarta a la mitad y hornear, seguir las indicciones del \r\napartado del armado. \r\nPeras en almíbar: \r\n1. Colocar en una olla el agua, azúcar, vaina de vainilla y rama de canela y llevar a hervir. \r\n2. Añadir las peras peladas al almíbar y coloca papel encerado por encima de las peras y conservar la \r\nhumead de las peras.\r\n3. Cocer a fuego bajo por 10 min aproximadamente o verificar la cocción insertando un cuchillo en las \r\nperas y este entre con facilidad. \r\n4. Enfriar las peras dentro del almíbar.","image":"uploads\/img_6a1f58d9526bf1.65055061.png"},{"id":"r6a1f5a0c8df7f3.09018446","name":"Key Lemon Pie","servings":8,"ingredients":[{"quantity":0.25,"unit":"kg","item":"Harina floja"},{"quantity":0.03,"unit":"kg","item":"Azúcar refinada"},{"quantity":0.18,"unit":"kg","item":"Mantequilla sin sal fría"},{"quantity":0.04,"unit":"kg","item":"Yema de huevo"},{"quantity":0.12,"unit":"\/6","item":"kg \/ pieza Yema de huevo"},{"quantity":0.1,"unit":"Azúcar","item":"refinada"},{"quantity":0.01,"unit":"kg","item":"Fécula de maíz (opcional)"},{"quantity":0.1,"unit":"L","item":"Jugo de limón con rayadura"},{"quantity":0.2,"unit":"L","item":"Agua"},{"quantity":0.15,"unit":"kg","item":"Mantequilla sin sal pomada"},{"quantity":0.02,"unit":"kg","item":"Clara de huevo"},{"quantity":0.24,"unit":"kg","item":"Azúcar refinada"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar molde de tarta de 25 cm. \r\n \r\nElaboración:  \r\nSucré: \r\n1. Cortar la mantequilla en cubos y refrigerar. \r\n2. Colocar en un bol la harina, azúcar y añadir la mantequilla en cubos fría y realizar el procedimiento de \r\nsableado hasta obtener una textura de arena. \r\n3. Añadir la yema de huevo y mezclar hasta obtener una masa lisa y homogénea.\r\n4. Envolver en papel plástico la masa de forma cuadrada y refrigerar por una hora. \r\n5. Suavizar la masa salida de refrigeración y con un rodillo estirarla de forma circular hasta lograr el \r\ntamaño de molde de la tarta. \r\n6. Enrollar la masa con ayuda del rodillo y cubrir el molde de tarta pegando todos los bordes \r\ncuidadosamente con los dedos.  \r\n7. Refrigerar por 20 min, pasado el tiempo cortar los excedentes y picar el fondo de la tarta con el tenedor.  \r\n8. + RUQHDU KDVWD GRUDU D & GH-15 min aproximadamente. \r\n9. Enfriar y reservar. \r\nCurd de limón: \r\n1. Mezclar en un bol las yemas y el azúcar y batir hasta blanquear, seguido de la fécula de maíz y mezclar. \r\n2. Medir en una taza medidora el jugo (previamente colado), el agua y combinar, para añadir a la mezcla \r\nanterior. \r\n3. Colocar la mezcla en un coludo y cocer a fuego medio hasta tener textura de crema espesa. \r\nProcurando mover constantemente los bordes y el fondo del coludo con una miserable para evitar la \r\ncocción de la yema. \r\n4. Colar la pastelera, tapar con papel plástico y reservar. \r\n5. Una vez tibia o 37°C la crema añadir la mantequilla previamente montada añadiéndola de forma \r\nenvolvente o con batidora utilizando el aditamento de globo. \r\nMerengue suizo: \r\n1. Preparar un coludo para baño maría (el baño maría consiste en colocar un coludo con agua a medio \r\nllenar para llevar a ebullición, una vez en esa temperatura bajar al mínimo el fuego y colocar un bol por \r\nencima con el chocolate previamente picado, teniendo el cuidado de que el agua no tope el bol).  \r\n2. Mezclar en un bol la clara y el azúcar, y colocarlo sobre el baño maría. Procurando que el agua no esté \r\nen ebullición y no tope el bol. \r\n3. Batir con ayuda de un globo la clara con el azúcar hasta comprobar que el azúcar se haya derretido. \r\nEnseguida colocar las claras en la batidora y batir a velocidad media y poco a poco incrementar la \r\nvelocidad.  \r\n4. Batir hasta que las claras hayan montado a punto de pico firme y estén a temperatura ambiente. \r\nArmado:  \r\n1. Colocar la masa de la tarta ya cocida sobre una base. Si hay imperfecciones corregir con ayuda de un \r\nmicroplane, rayador o tijera. \r\n2. Verter el lemon curd sobre la tarta previamente suavizada y extender, dejando la superficie lisa.  \r\n3. Colocar por encima el merengue suizo y extenderlo con ayuda de una cuchara, con la misma sacar \r\npuntas en el merengue. \r\n4. Flamear con un soplete el merengue hasta quedar dorado.","image":"uploads\/img_6a1f5a0c8db811.09938156.png"},{"id":"r6a1f6f3d031ba0.98220377","name":"Pastel de Tres Leches","servings":8,"ingredients":[{"quantity_raw":"8","quantity":8,"unit":"piezas","item":"Huevos"},{"quantity_raw":"0.240","quantity":0.24,"unit":"Kg","item":"Azúcar refinada"},{"quantity_raw":"0.213","quantity":0.213,"unit":"Kg","item":"Harina floja"},{"quantity_raw":"0.032","quantity":0.032,"unit":"Kg","item":"Fécula de Maíz"},{"quantity_raw":"0.012","quantity":0.012,"unit":"Kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.360","quantity":0.36,"unit":"L","item":"Leche evaporada"},{"quantity_raw":"0.387","quantity":0.387,"unit":"kg","item":"Leche condensada"},{"quantity_raw":"0.500","quantity":0.5,"unit":"L","item":"Leche entera"},{"quantity_raw":"1","quantity":1,"unit":"pieza","item":"Huevo"},{"quantity_raw":"0.060","quantity":0.06,"unit":"kg","item":"Fécula de maíz"},{"quantity_raw":"0.360","quantity":0.36,"unit":"L","item":"Leche evaporada"},{"quantity_raw":"0.387","quantity":0.387,"unit":"L","item":"Leche condensada"},{"quantity_raw":"0.500","quantity":0.5,"unit":"L","item":"Leche entera"},{"quantity_raw":"0.120","quantity":0.12,"unit":"kg","item":"Clara de huevo"},{"quantity_raw":"0.240","quantity":0.24,"unit":"kg","item":"Azúcar refinada"},{"quantity_raw":"0.100","quantity":0.1,"unit":"L","item":"Agua"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar el molde de bizcocho de 20 cm de diámetro con papel encerado en el fondo, engrasado y \r\nenharinado.\r\nElaboración:  \r\nBizcocho esponja: \r\n1. Batir los huevos en la batidora subiendo las velocidades progresivamente para obtener estabilidad en \r\nlos huevos. \r\n2. Añadir la azúcar refinada en forma de lluvia mientras los huevos se están batiendo.  \r\n3. Mezclar la harina y la fécula de maíz para tamizar y añadirla en dos partes a los huevos ya esponjados \r\nde forma envolvente hasta obtener una mezcla homogénea.  \r\n4. Derretir la mantequilla y mezclar con 3 cucharadas de la mezcla anterior para igualar texturas y \r\ncombinarlo nuevamente con la mezcla anterior de forma envolvente.  \r\n5. &RO R F DU O D P H ] F O D HQel bizcocho con un palillo de brocheta salga limpio. \r\nCrema de 3 Leches: \r\n1. Mezclar las leches en una jarra. Diluir la fécula de maíz con el huevo y añadírsela a la mezcla de las \r\nleches. \r\n2. Cocer la pastelera a fuego medio en un coludo hasta que rompa hervor y tome textura espesa, \r\nmoviendo constantemente el fondo y los lados del coludo para evitar que no se pegue la crema. \r\nLeches para humectar: \r\n1. Mezclar las leches y reservar para humectar el bizcocho.  \r\nMerengue Italiano: \r\n1. Combinar en un coludo la azúcar refinada con el agua y llevar a fuego bajo hasta formar un almíbar de \r\n2. Montar las claras en una batidora con aditamento de globo hasta que las claras lleguen a punto de \r\nletra. \r\n3. Verter en forma de hilo el almíbar a las claras por un lado del bol, batir a velocidad alta hasta que el \r\nmerengue italiano esté a temperatura ambiente. \r\n4. Utilizar según las indicaciones del chef.  \r\nPara el armado: \r\n1. Cortar el bizcocho en tres partes. \r\n2. Cubrir con papel plástico el molde de bizcocho limpio.  \r\n3. Colocar una de las partes del bizcocho y humedecer con la leche para cubrirlo con la mitad de la \r\npastelera repetir el proceso una vez más, colocar la otra parte del bizcocho, humedecer, colocar la \r\npastelera para cubrir con la última parte del bizcocho y humedecer.  \r\n4. Recomendar enfriar por 2 h antes de voltear el pastel o 30 min en congelación. \r\n5. Voltear el pastel en una base giratoria y proceder a forrar con el merengue italiano. \r\n6. En el sur del país se elabora el pastel de 3 leches con merengue, si es del centro o norte se elabora \r\ncobertura del pastel con crema montada.","image":"uploads\/img_6a1f6f3d02dc37.10661032.png"},{"id":"r6a1f70010fc114.27636172","name":"Pastel de fugde","servings":8,"ingredients":[{"quantity_raw":"8","quantity":8,"unit":"piezas","item":"Huevos"},{"quantity_raw":"0.240","quantity":0.24,"unit":"kg","item":"Azúcar refinada"},{"quantity_raw":"0.213","quantity":0.213,"unit":"kg","item":"Harina floja"},{"quantity_raw":"0.032","quantity":0.032,"unit":"kg","item":"Cocoa alcalina"},{"quantity_raw":"0.012","quantity":0.012,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.750","quantity":0.75,"unit":"L","item":"Leche evaporada"},{"quantity_raw":"0.730","quantity":0.73,"unit":"kg","item":"Leche condensada"},{"quantity_raw":"0.150","quantity":0.15,"unit":"kg","item":"Cocoa Alcalina"},{"quantity_raw":"0.030","quantity":0.03,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.500","quantity":0.5,"unit":"L","item":"Leche entera"},{"quantity_raw":"0.100","quantity":0.1,"unit":"kg","item":"Almendra entera picada"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar el molde de bizcocho de 18 cm de diámetro con papel encerado en el fondo, engrasado y \r\nenharinado. \r\nElaboración: \r\nBizcocho esponja de chocolate: \r\n1. Batir los huevos en la batidora subiendo las velocidades progresivamente para obtener estabilidad en \r\nlos huevos. \r\n2. Añadir la azúcar refinada en forma de lluvia mientras los huevos se están batiendo.  \r\n3. Mezclar la harina, la cocoa y la fécula de maíz para añadirla en dos partes a los huevos ya esponjados \r\nde forma envolvente hasta obtener una mezcla homogénea.  \r\n4. Derretir la mantequilla y mezclar con 3 cucharadas de la mezcla anterior para igualar texturas y \r\ncombinarlo nuevamente con la mezcla anterior de forma envolvente.  \r\n5. &ROR F DU OD PH ] FOD HQ HO PROGH \\ KRUQHDU D & DSUR [ L PDGDPHQWH SRU min o hasta que testando \r\nel bizcocho con un palillo de brocheta salga limpio. \r\n \r\nPara el fugde: \r\n1. Mezclar las leches en un coludo. Diluir la cocoa con la mitad de la leche evaporada estando esta \r\ncaliente para poder diluir la cocoa fácilmente. \r\n2. Cocer la pastelera a fuego medio hasta que rompa hervor y tome textura espesa. Moviendo \r\nconstantemente el fondo hasta que la pastelera este espesa, reducida y se pueda ver el fondo del \r\ncoludo, mover constantemente para evitar que pegue. \r\nLeches para humectar: \r\n1. Mezclar las leches y reservar para humectar el bizcocho.","image":"uploads\/img_6a1f70010f8b49.96560358.png"},{"id":"r6a1f70af11c094.34949723","name":"Choux","servings":40,"ingredients":[{"quantity_raw":"0.250","quantity":0.25,"unit":"L","item":"Agua o leche entera"},{"quantity_raw":"1","quantity":1,"unit":"Pieza","item":"Vaina de vainilla"},{"quantity_raw":"0.100","quantity":0.1,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.005","quantity":0.005,"unit":"kg","item":"Sal"},{"quantity_raw":"0.010","quantity":0.01,"unit":"kg","item":"Azúcar"},{"quantity_raw":"0.150","quantity":0.15,"unit":"kg","item":"Harina de fuerza"},{"quantity_raw":"5","quantity":5,"unit":"piezas","item":"Huevo"},{"quantity_raw":"0.250","quantity":0.25,"unit":"kg","item":"Azúcar moscabado"},{"quantity_raw":"0.250","quantity":0.25,"unit":"kg","item":"Harina floja"},{"quantity_raw":"0.250","quantity":0.25,"unit":"kg","item":"Mantequilla sin sal"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos.  \r\n4. Preparar una manga con boquilla #1 A. \r\n \r\nElaboración:  \r\nPaté au choux: \r\n1. Colocar en un coludo el agua, la mantequilla, la sal y el azúcar hasta que se derrita la mantequilla y el \r\nlíquido empiece a ebullir. \r\n2. Apagar el fuego y verter de golpe la harina y mezclar con una pala hasta obtener una masa tersa. \r\nReservar. \r\n3. Colocar la masa en la batidora y batir con el aditamento de pala y añadir el huevo poco a poco. \r\nProcurando que en este paso la masa esté a temperatura ambiente. \r\n4. Colocar la mezcla en la manga y sobre una charola con papel encerado hacer los profiteroles, duyando \r\nprofiteroles unos de 4 cm de diámetro. \r\n5. Colocar los círculos del craquelado sobre los pro I LWHUROHV \\ KRUQHDU D & SRU P SDVDGR HO WL HPSR\r\nEDMDU OD WHP SHUDWXUD D & \\ KRUQHDU SRU RWURV m. \r\n6. Enfriar y reservar.\r\nCraqueleado: \r\n1. Cortar la mantequilla en cubos y refrigerar. \r\n2. Colocar en un bol la harina, azúcar y añadir la mantequilla en cubos fría y realizar el procedimiento de \r\nsableado hasta obtener una masa. \r\n3. Envolver en papel plástico la masa de forma cuadrada y refrigerar por una hora. \r\n4. Suavizar la masa salida de refrigeración y con un rodillo estirarla de medio centímetro de grosor entre \r\ndos papeles encerados y cortar círculos de 3.5 cm de diámetro. \r\n5. Congelar por 20 min los círculos.  \r\n6. Colocar los círculos sobre los profiteroles y hornear junto con los profiteroles.","image":"uploads\/img_6a1f70af117b38.22552420.png"},{"id":"r6a1f72270e6f08.14868154","name":"Éclairs","servings":20,"ingredients":[{"quantity_raw":"0.250","quantity":0.25,"unit":"L","item":"Agua o leche entera"},{"quantity_raw":"1","quantity":1,"unit":"Pieza","item":"Vaina de vainilla"},{"quantity_raw":"0.100","quantity":0.1,"unit":"Kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.005","quantity":0.005,"unit":"Kg","item":"Sal"},{"quantity_raw":"0.010","quantity":0.01,"unit":"Kg","item":"Azúcar"},{"quantity_raw":"0.150","quantity":0.15,"unit":"kg","item":"Harina de fuerza"},{"quantity_raw":"5","quantity":5,"unit":"piezas","item":"Huevo"}],"procedure":"Preparación de todas las recetas:  \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos.  \r\n4. Preparar una manga con boquilla #1 M. \r\nElaboración:  \r\nPaté au choux: }\r\n1. Preparar una manga con boquilla #1 M. \r\n2. Colocar en un coludo el agua, la mantequilla, la sal y el azúcar hasta que se derrita la mantequilla y el \r\nlíquido empiece a ebullir. \r\n3. Apagar el fuego y verter de golpe la harina y mezclar con una pala hasta obtener una masa tersa. \r\nReservar. \r\n4. Colocar la masa en la batidora y batir con el aditamento de pala y añadir el huevo poco a poco. \r\nProcurando que en este paso la masa esté a temperatura ambiente. \r\n5. Colocar la mezcla en la manga y sobre una charola con papel encerado hacer los profiteroles, duyando \r\ntamaños de Eclairs unos de 7.5 cm de largo \r\n6. HRUQHDU D & SRU P SDVDGR HO WL HPSR EDMDU OD WHPS HUDWXUD D & \\ KRUQHDU SRU RWURV m. \r\n7. Enfriar y reservar.","image":"uploads\/img_6a1f722703a492.23733113.png"},{"id":"r6a1f778d24f5a2.64183113","name":"Torta Vasca de Queso","servings":8,"servings_raw":"8","ingredients":[{"quantity_raw":"0.570","quantity":0.57,"unit":"kg","item":"Queso crema"},{"quantity_raw":"4","quantity":4,"unit":"piezas","item":"Huevo"},{"quantity_raw":"0.230","quantity":0.23,"unit":"kg","item":"Azúcar refinada"},{"quantity_raw":"0.030","quantity":0.03,"unit":"kg","item":"Harina floja"},{"quantity_raw":"0.005","quantity":0.005,"unit":"kg","item":"Sal"}],"procedure":"Preparación de las recetas:  \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Preparar el molde de bizcocho desmondable de 18 cm de diámetro con papel encerado en el fondo, \r\nengrasado y enharinado. \r\n5. 3 UH F DOHQWDU HO KRUQR D & \r\nElaboración:  \r\n1. Mezclar el queso crema, el azúcar y los huevos en un bol hasta tener una crema homogénea.  \r\n2. Añadir la harina y la sal a la mezcla anterior de forma revolvente, incorporar la crema para batir hasta \r\nobtener una crema ligera.  \r\n3. Colocar la mezcla en el molde y hornear aproximadamente por 30 min D & \r\n4. Apagar el horno y dejar que la tarta se enfríe. \r\n5. Refrigerar por 4-5 horas para cortar y servir, o colocar en congelar por 30 min como mínimo.","image":"uploads\/img_6a1f778d24abc6.19009978.png"},{"id":"r6a1f7952226f09.30080285","name":"Religiosas","servings":0.75,"servings_raw":"15\/20","ingredients":[{"quantity_raw":"0.250","quantity":0.25,"unit":"L","item":"Agua o leche entera"},{"quantity_raw":"1","quantity":1,"unit":"Pieza","item":"Vaina de vainilla"},{"quantity_raw":"0.100","quantity":0.1,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.005","quantity":0.005,"unit":"kg","item":"Sal"},{"quantity_raw":"0.010","quantity":0.01,"unit":"kg","item":"Azúcar"},{"quantity_raw":"0.150","quantity":0.15,"unit":"kg","item":"Harina de fuerza"},{"quantity_raw":"5","quantity":5,"unit":"piezas","item":"Huevo"},{"quantity_raw":"0.250","quantity":0.25,"unit":"kg","item":"Azúcar moscabado"},{"quantity_raw":"0.250","quantity":0.25,"unit":"kg","item":"Harina floja"},{"quantity_raw":"0.250","quantity":0.25,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.420","quantity":0.42,"unit":"L","item":"Leche entera"},{"quantity_raw":"4","quantity":4,"unit":"piezas","item":"Yemas de huevo"},{"quantity_raw":"0.125","quantity":0.125,"unit":"kg","item":"Azúcar refinada"},{"quantity_raw":"0.060","quantity":0.06,"unit":"kg","item":"Fécula de maíz"},{"quantity_raw":"0.090","quantity":0.09,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"3","quantity":3,"unit":"piezas","item":"Clara de huevo"},{"quantity_raw":"0.240","quantity":0.24,"unit":"kg","item":"Azúcar refinada"},{"quantity_raw":"0.100","quantity":0.1,"unit":"L","item":"Agua"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos.  \r\n4. Preparar una manga con boquilla #1 M. \r\nElaboración:  \r\nPaté au choux: \r\n1. Preparar una manga con boquilla #1 A.   \r\n2. Colocar en un coludo el agua, la mantequilla, la sal y el azúcar hasta que se derrita la mantequilla y el \r\nlíquido empiece a ebullir. \r\n3. Apagar el fuego y verter de golpe la harina y mezclar con una pala hasta obtener una masa tersa. \r\nReservar. \r\n4. Colocar la masa en la batidora y batir con el aditamento de pala y añadir el huevo poco a poco. \r\nProcurando que en este paso la masa esté a temperatura ambiente. \r\n5. Colocar la mezcla en la manga y sobre una charola con papel encerado hacer los profiteroles, duyando \r\n2 tamaños de profiteroles unos de 4 cm de diámetro y otro de 2 cm. \r\n6. &RO R F DU\r\nED M DU O D\r\nO RV F t U F XO RV GH O\r\nWHP SH U DW XUD D\r\nm. \r\nF U D T X H O DG R\r\n& \\\r\nV RE U H O RV\r\nKR U QH DU SRU\r\nSU R I L W HURO HV\r\nRWURV\r\n7. Enfriar y reservar.  \r\nCraqueleado: \r\n1. Cortar la mantequilla en cubos y refrigerar. \r\n2. Colocar en un bol la harina, azúcar y añadir la mantequilla en cubos fría y realizar el procedimiento de \r\nsableado hasta obtener una masa. \r\n3. Envolver en papel plástico la masa de forma cuadrada y refrigerar por una hora. \r\n4. Suavizar la masa salida de refrigeración y con un rodillo estirarla de medio centímetro de grosor entre \r\ndos papeles encerados y cortar círculos de 3.5 cm de diámetro. \r\n5. Congelar por 20 min los círculos.  \r\n6. Colocar los círculos sobre los profiteroles y hornear según las indicaciones del chef. \r\nCrema moussline: \r\n1. Pomar la mantequilla en batidora y aditamento de pala y reservar. \r\n2. Hervir la leche con la vaina de vainilla y reservar.  \r\n3. Batir las yemas con el azúcar hasta blanquear seguido de la fécula y mezclar. \r\n4. Verter la leche poco a poco sobre la mezcla de las yemas para temperar. \r\n(\r\n5. Colocar la mezcla en un coludo y cocer hasta que rompa hervor y espese. Procurando mover \r\nconstantemente el borde y el fondo del coludo para evitar que se pegue la crema. \r\n6. Q I U L DU O D SD V W HO HUD\r\n7. Añadir la mantequilla pomada a la pastelera y batir hasta formar una crema homogénea.  \r\nMerengue Italiano: \r\n1. Combinar en un coludo la azúcar refinada con el agua y llevar a fuego bajo hasta formar un almíbar de \r\n&\r\n2. Montar las claras en una batidora con aditamento de globo hasta que las claras lleguen a punto de \r\nletra. \r\n3. Verter en forma de hilo el almíbar a las claras por un lado del bol, batir a velocidad alta hasta que el \r\nmerengue italiano esté a temperatura ambiente. \r\n4. Utilizar para pegar los profiteroles.\r\nArmado: \r\n1. Rellenar los profiteroles con la crema mousseline.\r\n2. Con ayuda de una manga colocar por arriba del profiterol de mayor tamaño merengue italiano para \r\npegar el profiterol relleno de menor tamaño. Nuevamente colocar merengue italiano para decorar.  \r\n3. Flamear el merengue. A esa torre de profiterol se le denomina Religiosa.","image":"uploads\/img_6a1f795221d2a6.17927809.png"},{"id":"r6a1f7a4ae34185.80896796","name":"Brownies","servings":6,"servings_raw":"6","ingredients":[{"quantity_raw":"0.400","quantity":0.4,"unit":"kg","item":"Chocolate oscuro amargo"},{"quantity_raw":"0.230","quantity":0.23,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.115","quantity":0.115,"unit":"kg","item":"Azúcar refinada"},{"quantity_raw":"0.115","quantity":0.115,"unit":"kg","item":"Azúcar morena"},{"quantity_raw":"6","quantity":6,"unit":"piezas","item":"Huevo"},{"quantity_raw":"0.010","quantity":0.01,"unit":"L","item":"Esencia de vainilla"},{"quantity_raw":"0.005","quantity":0.005,"unit":"kg","item":"Sal"},{"quantity_raw":"0.200","quantity":0.2,"unit":"kg","item":"Harina floja"},{"quantity_raw":"0.100","quantity":0.1,"unit":"kg","item":"Cocoa en polvo"}],"procedure":"Preparación de las recetas:  \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos. \r\n4. Enharinar dos refractarios de 17x17cm, cubriendo con papel encerado en la parte inferior o ajustar la \r\nreceta a el tamaño de refractario que se tenga en campus. \r\n5. Precalentar el horno a 180 & \r\n \r\nElaboración:  \r\n1. Derretir el chocolate y la mantequilla a baño maría o en microondas de 30 en 30 segundos hasta que \r\nestén completamente mezcladas, reservar.  \r\n2. En un bol colocar las azucares y los huevos y batir hasta esponja obteniendo una textura de crema.  \r\n3. Añadir la esencia de vainilla a los huevos seguido del chocolate y la mantequilla derretida y mezclar \r\ncon un batidor globo.  \r\n4. Tamizar la harina y la cocoa juntas tres veces para que los polvos queden de color café.  \r\n5. Añadir los polvos a la mezcla del chocolate y los huevos e incorporarlos de forma envolvente.  \r\n6. Dividir la mezcla en los dos refractarios y llenar hasta la mitad del molde. \r\n7. + RUQHDU D & SRU P L Q \r\n8. Enfriar y cortar 6 piezas de brownie de 5.6 cm por refractario.","image":"uploads\/img_6a1f7a4ae2ee88.98391379.png"},{"id":"r6a1f7ac2b71c27.93055152","name":"Coulant de chocolate de masa única","servings":9,"servings_raw":"9","ingredients":[{"quantity_raw":"0.300","quantity":0.3,"unit":"kg","item":"Chocolate oscuro"},{"quantity_raw":"0.150","quantity":0.15,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"7","quantity":7,"unit":"piezas","item":"Huevo"},{"quantity_raw":"0.150","quantity":0.15,"unit":"kg","item":"Azúcar refinada"},{"quantity_raw":"0.150","quantity":0.15,"unit":"kg","item":"Harina floja"},{"quantity_raw":"0.037","quantity":0.037,"unit":"kg","item":"Cocoa"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos.  \r\n4. Enmantequillar 10 aros de acero inoxidable de 7.5 cm de diámetro o ramequines con cocoa y \r\nmantequilla sobre una bandeja con papel encerado o tapete siliconado.  \r\nElaboración:  \r\n1. Derretir el chocolate y la mantequilla a baño maría o en microondas de 40 en 40 segundos hasta que \r\nestén completamente mezcladas, reservar.  \r\n2. Colocar las azúcares y los huevos en un bol y batir hasta esponjar obteniendo una textura de crema.  \r\n3. Añadir la esencia de vainilla a los huevos seguido del chocolate y la mantequilla derretida y mezclar \r\ncon un batidor globo.  \r\n4. Tamizar la harina y la cocoa juntas tres veces para que los polvos queden de color café.  \r\n5. Añadir los polvos a la mezcla del chocolate y los huevos e incorporarlos de forma envolvente.  \r\n6. Dividir la mezcla equitativamente entre los 9-10 aros de 7.5 cm de diámetro y llenar a ¾ partes.  \r\n7. Congelar por 2 horas los aros con la mezcla del coulant.  \r\n8. + RUQHDU D & ORV coulant por 15 min aproximadamente.  \r\n9. Enfriar por 5 min y desmoldar los coulant.  \r\n10. La cocción del coulant debe ser fundente por dentro, por tanto, la cocción es uniforme a temperatura \r\nDOWD HVWD SXHGH RV F LODU HQWUH ORV","image":"uploads\/img_6a1f7ac2b6a039.15888351.png"},{"id":"r6a1f7ca588ec59.77882994","name":"Verrinas de mousse de chocolate","servings":30,"servings_raw":"30","ingredients":[{"quantity_raw":"6","quantity":6,"unit":"Piezas","item":"Yema de huevo"},{"quantity_raw":"0.200","quantity":0.2,"unit":"kg","item":"Azúcar refinada"},{"quantity_raw":"0.400","quantity":0.4,"unit":"kg","item":"Chocolate oscuro"},{"quantity_raw":"0.400","quantity":0.4,"unit":"kg","item":"Crema para batir"},{"quantity_raw":"0.300","quantity":0.3,"unit":"kg","item":"Chocolate oscuro"},{"quantity_raw":"0.300","quantity":0.3,"unit":"kg","item":"Crema para batir"},{"quantity_raw":"0.250","quantity":0.25,"unit":"kg","item":"Fruta de temporada"}],"procedure":"Preparación de todas las recetas:  \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos.  \r\n4. Tener verrinas limpias y boleadas. \r\n \r\nElaboración:  \r\nPate au bombe: \r\n1. Combinar en un coludo la azúcar refinada y llevar a fu H J R EDMR KDVWD I RUPDU XQ DOP t EDU GH & \r\n2. Montar las yemas en una batidora con aditamento de globo hasta esponjar. \r\n3. Verter en forma de hilo el almíbar a las yemas por un lado del bol, batir a velocidad alta hasta que el \r\npaté au bombe esté a temperatura ambiente. \r\nMousse de chocolate: \r\n1. Derretir el chocolate previamente picado a baño maría o en microondas de 30 en 30 segundos, \r\nreservar. \r\n2. Montar la crema para batir a punto de pico suave. Enfriar y reservar.  \r\n3. Mezclar el chocolate con el paté au bombe de forma envolvente. \r\n4. Añadir por último la crema montada a la mezcla del chocolate. Colocar la mousse en una manga para \r\nllenar a ¾ partes las verrinas de plástico o de cristal, igualmente pueden ser copas que se tenga en \r\ncampus. \r\n5. Enfriar de 30 a una hora.  \r\nGanache: \r\n1. Derretir el chocolate previamente picado a baño maría o en microondas de 30 en 30 segundos, \r\nreservar. \r\n2. Mezclar el chocolate con la crema y colocar en una manga para coloca una capa de medio centímetro \r\nsobre la mousse de chocolate ya fría. \r\nArmado: \r\n1. Cubrir las verrinas con mousse de chocolate ya gelificado con una capa ligera de ganache de \r\nchocolate.  \r\n2. Decorar con fruta de temporada o virutas del chocolate.","image":"uploads\/img_6a1f7ca58899b0.71974599.png"},{"id":"r6a204f71300327.98746678","name":"Trufas Italianas","servings":50,"servings_raw":"50","ingredients":[{"quantity_raw":"0.500","quantity":0.5,"unit":"L","item":"Crema para batir"},{"quantity_raw":"0.050","quantity":0.05,"unit":"kg","item":"Glucosa"},{"quantity_raw":"0.075","quantity":0.075,"unit":"kg","item":"Azúcar tremoline"},{"quantity_raw":"0.500","quantity":0.5,"unit":"kg","item":"Cobertura de chocolate oscuro"},{"quantity_raw":"0.075","quantity":0.075,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.150","quantity":0.15,"unit":"L","item":"Controy"},{"quantity_raw":"0.200","quantity":0.2,"unit":"kg","item":"Cococa brut"},{"quantity_raw":"0.500","quantity":0.5,"unit":"L","item":"Crema para batir"},{"quantity_raw":"0.060","quantity":0.06,"unit":"kg","item":"Glucosa"},{"quantity_raw":"0.600","quantity":0.6,"unit":"kg","item":"Cobertura de chocolate blanco"},{"quantity_raw":"0.600","quantity":0.6,"unit":"kg","item":"Cobertura de chocolate con leche"},{"quantity_raw":"0.180","quantity":0.18,"unit":"kg","item":"Mantequilla sin sal"},{"quantity_raw":"0.200","quantity":0.2,"unit":"L","item":"Leche de coco"},{"quantity_raw":"0.200","quantity":0.2,"unit":"L","item":"Malibú"},{"quantity_raw":"0.200","quantity":0.2,"unit":"kg","item":"Coco rayado"}],"procedure":"Preparación de todas las recetas: \r\n1. Se trabajará en brigadas de 4 a 5 personas como máximo. \r\n2. Pesado de los ingredientes.  \r\n3. Tamizar todos ingredientes con textura de los polvos.  \r\n4. Preparar una manga pastelera y una charola con papel encerado. \r\n \r\nElaboración:  \r\nTrufas de Controy: \r\n1. Hervir la crema con la glucosa seguido del azúcar tremoline. \r\n2. Picar la cobertura de chocolate y la mantequilla y juntarlas en un bol. \r\n3. Verter la mezcla caliente de la crema sobre la cobertura y la mantequilla para obtener un ganaché \r\nhomogéneo. \r\n4. Agregar el controy al ganaché y dejar enfriar.  \r\n5. Colocar la mezcla en la manga pastelera y formar pequeños kisses de 30 gr cada uno sobre la charola \r\ncon papel encerado y refrigerar por 1 h. \r\n6. Formar las trufas con las manos cubiertas con guantes y pasarlas por cocoa brut.  \r\n7. Enfriar y reservar.  \r\n \r\nTrufas de coco: \r\n1. Preparar una manga pastelera y una charola con papel encerado. \r\n2. Hervir la crema con la glucosa.  \r\n3. Picar las coberturas de chocolate y la mantequilla y juntarlas en un bol. \r\n4. Verter la mezcla caliente de la crema sobre la cobertura y la mantequilla para obtener un ganaché \r\nhomogéneo. \r\n5. Agregar el Malibú y leche de coco al ganaché y dejar enfriar.  \r\n6. Colocar la mezcla en la manga pastelera y formar pequeños kisses de 30 gr cada uno sobre la charola \r\ncon papel encerado y refrigerar por 1 h. \r\n7. Formar las trufas con las manos cubiertas con guantes y pasarlas por el coco rallado. \r\n8. Enfriar y reservar.","image":"uploads\/img_6a204f712b7ee2.23129169.png"}];
+    const recipeSelect = document.getElementById('recipeSelect');
+    const personCountInput = document.getElementById('personCount');
+    const recipeTitle = document.getElementById('recipeTitle');
+    const baseServings = document.getElementById('baseServings');
+    const scaleFactor = document.getElementById('scaleFactor');
+    const recipeIngredients = document.getElementById('recipeIngredients');
+    const procedureContainer = document.getElementById('procedureContainer');
+    const recipeImage = document.getElementById('recipeImage');
+    const imageInput = document.getElementById('image');
+    const clipboardImageInput = document.getElementById('clipboardImage');
+    const editImageSection = document.getElementById('editImageSection');
+    const pasteArea = document.getElementById('pasteArea');
+    const pasteFileInput = document.getElementById('pasteFileInput');
+
+    function parseServingsValue(value) {
+        if (typeof value === 'number') {
+            return value;
+        }
+        if (typeof value !== 'string') {
+            return NaN;
+        }
+        const trimmed = value.trim();
+        if (trimmed === '') {
+            return NaN;
+        }
+        const fractionMatch = trimmed.match(/^([0-9]+(?:\.[0-9]+)?)\s*\/\s*([0-9]+)(.*)$/);
+        if (fractionMatch) {
+            const numerator = Number(fractionMatch[1]);
+            const denominator = Number(fractionMatch[2]);
+            return denominator === 0 ? NaN : numerator / denominator;
+        }
+        const numberMatch = trimmed.match(/^([0-9]+(?:\.[0-9]+)?)/);
+        if (numberMatch) {
+            return Number(numberMatch[1]);
+        }
+        return NaN;
+    }
+
+    function parseIngredientQuantity(value) {
+        if (typeof value === 'number') {
+            return value;
+        }
+        if (typeof value !== 'string') {
+            return NaN;
+        }
+        const trimmed = value.trim();
+        if (trimmed === '') {
+            return NaN;
+        }
+        if (trimmed.includes('/')) {
+            const [num, den] = trimmed.split('/').map(Number);
+            return den && !Number.isNaN(num) && !Number.isNaN(den) ? num / den : NaN;
+        }
+        return Number(trimmed);
+    }
+
+    function formatNumber(value) {
+        return Number(value).toFixed(3);
+    }
+
+    function blobToDataURL(blob) {
+        return new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    function renderRecipe(recipe, persons) {
+        const baseServingsText = recipe.servings_raw ?? recipe.servings;
+        const servingsValue = parseServingsValue(baseServingsText);
+        const factor = Number.isFinite(servingsValue) && servingsValue > 0 ? Math.max(persons, 1) / servingsValue : null;
+        recipeTitle.textContent = recipe.name;
+        baseServings.textContent = `📊 Porciones base: ${baseServingsText}`;
+        scaleFactor.textContent = factor !== null ? `🔢 Factor: ${formatNumber(factor)}` : '🔢 Factor: -';
+
+        recipeIngredients.innerHTML = '';
+        recipe.ingredients.forEach(ingredient => {
+            const row = document.createElement('tr');
+            const quantityCell = document.createElement('td');
+            const unitCell = document.createElement('td');
+            const itemCell = document.createElement('td');
+
+            const rawQuantity = ingredient.quantity_raw ?? ingredient.quantity;
+            const quantityValue = parseIngredientQuantity(rawQuantity);
+            const isPieceUnit = /^pieza(?:s)?$/i.test((ingredient.unit ?? '').trim());
+            let quantityText;
+            if (isPieceUnit && Number.isFinite(quantityValue) && factor !== null) {
+                const pieceCount = Math.max(1, Math.round(quantityValue * factor));
+                quantityText = String(pieceCount);
+            } else {
+                quantityText = factor === 1 && ingredient.quantity_raw ? ingredient.quantity_raw : (Number.isFinite(quantityValue) ? formatNumber(quantityValue * factor) : rawQuantity);
+            }
+
+            quantityCell.textContent = quantityText;
+            unitCell.textContent = ingredient.unit;
+            itemCell.textContent = ingredient.item;
+
+            row.appendChild(quantityCell);
+            row.appendChild(unitCell);
+            row.appendChild(itemCell);
+            recipeIngredients.appendChild(row);
+        });
+
+        // Mostrar procedimiento si existe
+        if (recipe.procedure && recipe.procedure.trim() !== '') {
+            procedureContainer.innerHTML = `
+                <div class="procedure-section">
+                    <h4>Procedimiento</h4>
+                    <div class="procedure-text">${recipe.procedure}</div>
+                </div>
+            `;
+        } else {
+            procedureContainer.innerHTML = '';
+        }
+
+        if (recipe.image && recipe.image.trim() !== '') {
+            recipeImage.src = recipe.image;
+            recipeImage.style.display = 'block';
+            editImageSection.style.display = 'none';
+        } else {
+            recipeImage.style.display = 'none';
+            editImageSection.style.display = 'block';
+        }
+    }
+
+    function update() {
+        const selectedId = recipeSelect.value;
+        const persons = parseInt(personCountInput.value, 10) || 1;
+        const recipe = recipes.find(r => r.id === selectedId);
+        if (!recipe) {
+            recipeTitle.textContent = 'Selecciona una receta';
+            baseServings.textContent = '📊 Porciones base: -';
+            scaleFactor.textContent = '🔢 Factor: -';
+            recipeIngredients.innerHTML = '<tr><td colspan="3">Elige una receta para ver los ingredientes.</td></tr>';
+            procedureContainer.innerHTML = '';
+            editImageSection.style.display = 'none';
+            return;
+        }
+        renderRecipe(recipe, persons);
+    }
+
+    function init() {
+        recipes.forEach(recipe => {
+            const option = document.createElement('option');
+            option.value = recipe.id;
+            option.textContent = `${recipe.name} (${recipe.servings} porciones)`;
+            recipeSelect.appendChild(option);
+        });
+
+        if (recipes.length > 0) {
+            recipeSelect.value = recipes[0].id;
+        }
+
+        recipeSelect.addEventListener('change', update);
+        personCountInput.addEventListener('input', update);
+
+        document.addEventListener('paste', async event => {
+            if (document.activeElement === pasteArea) return;
+            const items = event.clipboardData?.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                    const blob = item.getAsFile();
+                    if (!blob) continue;
+                    const dataUrl = await blobToDataURL(blob);
+                    clipboardImageInput.value = dataUrl;
+                    imageInput.value = '';
+                    recipeImage.src = dataUrl;
+                    recipeImage.style.display = 'block';
+                    break;
+                }
+            }
+        });
+
+        pasteArea.addEventListener('paste', async event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const items = event.clipboardData?.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                    const blob = item.getAsFile();
+                    if (!blob) continue;
+                    const dataUrl = await blobToDataURL(blob);
+                    const selectedId = recipeSelect.value;
+                    if (!selectedId) {
+                        alert('Por favor selecciona una receta primero.');
+                        return;
+                    }
+                    const formData = new FormData();
+                    formData.append('action', 'update_recipe_image');
+                    formData.append('recipe_id', selectedId);
+                    formData.append('clipboard_image', dataUrl);
+                    
+                    fetch('recetas.php', {
+                        method: 'POST',
+                        body: formData
+                    }).then(response => response.text()).then(html => {
+                        location.reload();
+                    }).catch(err => console.error('Error:', err));
+                    break;
+                }
+            }
+        });
+
+        pasteArea.addEventListener('click', () => {
+            pasteArea.focus();
+        });
+
+        if (pasteFileInput) {
+            pasteFileInput.addEventListener('change', async () => {
+                if (!pasteFileInput.files || pasteFileInput.files.length === 0) return;
+                const file = pasteFileInput.files[0];
+                const dataUrl = await blobToDataURL(file);
+                const selectedId = recipeSelect.value;
+                if (!selectedId) {
+                    alert('Por favor selecciona una receta primero.');
+                    return;
+                }
+                const formData = new FormData();
+                formData.append('action', 'update_recipe_image');
+                formData.append('recipe_id', selectedId);
+                formData.append('clipboard_image', dataUrl);
+
+                fetch('recetas.php', {
+                    method: 'POST',
+                    body: formData
+                }).then(() => {
+                    location.reload();
+                }).catch(err => console.error('Error:', err));
+            });
+        }
+
+        pasteArea.addEventListener('beforeinput', (event) => {
+            event.preventDefault();
+        });
+
+        pasteArea.addEventListener('keydown', (event) => {
+            if (event.key !== 'v' || !event.ctrlKey && !event.metaKey) {
+                event.preventDefault();
+            }
+        });
+
+        imageInput.addEventListener('change', () => {
+            if (imageInput.files && imageInput.files.length > 0) {
+                clipboardImageInput.value = '';
+            }
+        });
+
+        update();
+    }
+
+    init();
+</script>
+</body>
+</html>
